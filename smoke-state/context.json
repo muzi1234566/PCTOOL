@@ -1,0 +1,14 @@
+{
+  "deviceHash": "unknown",
+  "planId": "",
+  "barrierStatus": "idle",
+  "overrideTokens": [],
+  "lastSnapshot": {
+    "timestamp": 1793992819021,
+    "deviceHash": "unknown",
+    "criticalFields": {},
+    "partitionHashes": {}
+  },
+  "eventChainHash": "6349dac22732ae301c3775d18d1e7b52fb805448ae6ff7953abae590f583c3b9",
+  "pendingStep": null
+}

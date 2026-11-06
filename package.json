@@ -1,0 +1,41 @@
+{
+  "name": "android-playground-orchestrator",
+  "version": "5.0.0-rc1",
+  "private": true,
+  "type": "module",
+  "description": "Android 玩机安全编排层：三级护栏 + opbus 物理隔离 + 链式审计 + 全场景矩阵（OTA 保 Root/降级 ARB/伪回锁/救砖/隐藏栈/免 Root）",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./plugin": {
+      "types": "./dist/dsh-plugin.d.ts",
+      "default": "./dist/dsh-plugin.js"
+    }
+  },
+  "files": ["dist/", "scripts/", "README.md", "RELEASE.md"],
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "node --test \"dist/test/*.test.js\"",
+    "smoke": "node scripts/smoke-test.mjs"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.4",
+    "@types/node": "^20.14.0"
+  },
+  "dsh": {
+    "id": "android-playground-orchestrator",
+    "kind": "tool",
+    "displayName": "Android Playground Orchestrator",
+    "entry": "./dist/dsh-plugin.js",
+    "export": "registerDshPlugin",
+    "tools": ["android_probe", "android_plan_root", "android_plan_utility", "android_execute_step"],
+    "permissions": ["storage", "process:adb", "process:fastboot", "network:github"],
+    "description": "Android 刷机/Root/隐藏栈安全编排：三级护栏 + Override 令牌 + 链式审计 + 断点恢复"
+  }
+}
