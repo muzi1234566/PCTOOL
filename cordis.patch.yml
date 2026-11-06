@@ -1,0 +1,45 @@
+# =====================================================================
+# cordis.patch.yml — DSH（Cordis 内核）插件加载配置补丁
+# =====================================================================
+# 两个文件各司其职：
+#   · package.json 的 dsh.bundle —— 声明"这是一个组合包"（修复
+#     「这个包没有声明组合包，不能作为插件管理」的安装报错）；
+#   · cordis.patch.yml —— 声明"如何加载、注册哪些工具、注入什么配置"。
+#
+# 安装路径（二选一）：
+#   dsh plugin add "$(pwd)"
+#   cp -r "$(pwd)" ~/.dsh/plugins/android-playground-orchestrator && dsh restart
+# 加载后 DSH 会把本补丁合并进插件实例配置。
+
+plugins:
+  android-playground-orchestrator:
+    enabled: true
+
+    # —— 入口：与 package.json 的 dsh.bundle.entry / export 一致 ——
+    entry: ./dist/dsh-plugin.js
+    export: registerDshPlugin
+
+    # —— 工具注册清单（4 个，与 bundle.tools 一致） ——
+    tools:
+      - android_probe
+      - android_plan_root
+      - android_plan_utility
+      - android_execute_step
+
+    # —— 声明的宿主权限 ——
+    permissions:
+      - storage
+      - process:adb
+      - process:fastboot
+      - network:github
+
+    # —— 传给 registerDshPlugin(ctx, opts) 的 opts（映射到 OrchestratorConfig） ——
+    config:
+      adbPath: adb                 # adb 可执行文件（PATH 或绝对路径）
+      fastbootPath: fastboot       # fastboot 可执行文件
+      # stateDir / cacheDir 缺省落在 ~/.dsh-orchestrator/{state,cache}，服务化部署时显式覆盖：
+      # stateDir: /var/lib/dsh/orchestrator-state
+      # cacheDir: /var/lib/dsh/orchestrator-cache
+      cmdTimeoutMs: 30000          # 单条 adb/fastboot 命令超时（刷大分区内部会按倍率放宽）
+      onDeviceDownload: false      # v4：≥50MB 大文件改由手机 Wi-Fi 自主下载（需设备端 wget/curl）
+      # mirrorBase: https://your-mirror.example   # v3：mirror 资源源（可选）

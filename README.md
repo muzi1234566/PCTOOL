@@ -233,6 +233,8 @@ adb shell cmd battery reset
 
 ## DSH 插件（P3）
 
+**组合包声明（v5 RC1 修复）**：DSH 安装器要求包必须声明组合包，否则报「这个包没有声明组合包，不能作为插件管理」。本包由 `package.json` 的 `dsh.bundle` 字段声明（entry/export/tools/permissions/configSchema），加载配置由仓库根的 `cordis.patch.yml` 提供（enabled / entry / tools / permissions / config 注入 `registerDshPlugin(ctx, opts)`）。若你的 DSH 版本读取的字段名不同（如 `cordis.bundle`），只需同步改这两处的键名。
+
 `src/dsh-plugin.ts` 把编排器包装成 DSH 原生工具。内部 Orchestrator 类对对话框完全隐藏。
 
 **工具面**

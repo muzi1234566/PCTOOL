@@ -16,7 +16,7 @@
       "default": "./dist/dsh-plugin.js"
     }
   },
-  "files": ["dist/", "scripts/", "README.md", "RELEASE.md"],
+  "files": ["dist/", "scripts/", "cordis.patch.yml", "README.md", "RELEASE.md"],
   "engines": { "node": ">=18" },
   "scripts": {
     "build": "tsc -p tsconfig.json",
@@ -31,11 +31,35 @@
   "dsh": {
     "id": "android-playground-orchestrator",
     "kind": "tool",
-    "displayName": "Android Playground Orchestrator",
-    "entry": "./dist/dsh-plugin.js",
-    "export": "registerDshPlugin",
-    "tools": ["android_probe", "android_plan_root", "android_plan_utility", "android_execute_step"],
-    "permissions": ["storage", "process:adb", "process:fastboot", "network:github"],
-    "description": "Android 刷机/Root/隐藏栈安全编排：三级护栏 + Override 令牌 + 链式审计 + 断点恢复"
+    "description": "Android 刷机/Root/隐藏栈安全编排：三级护栏 + Override 令牌 + 链式审计 + 断点恢复",
+    "bundle": {
+      "id": "android-playground-orchestrator",
+      "displayName": "Android Playground Orchestrator",
+      "version": "5.0.0-rc1",
+      "entry": "./dist/dsh-plugin.js",
+      "export": "registerDshPlugin",
+      "runtime": "node",
+      "tools": [
+        "android_probe",
+        "android_plan_root",
+        "android_plan_utility",
+        "android_execute_step"
+      ],
+      "permissions": [
+        "storage",
+        "process:adb",
+        "process:fastboot",
+        "network:github"
+      ],
+      "configSchema": {
+        "adbPath": "string",
+        "fastbootPath": "string",
+        "stateDir": "string",
+        "cacheDir": "string",
+        "cmdTimeoutMs": "number",
+        "onDeviceDownload": "boolean",
+        "mirrorBase": "string?"
+      }
+    }
   }
 }
